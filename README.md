@@ -1,116 +1,93 @@
-# Rural TeleHealth Voice-based AI System
+# Telehealth Voice Assistant
 
-A voice-based AI system that allows people to call a toll-free number and get automated health advice in their native language, designed for underserved rural communities.
-
-## Project Overview
-
-This project consists of two main components:
-
-1. **Flutter Mobile App** - A user-friendly mobile interface for accessing health advice
-2. **Flask Backend** - A robust server that powers the voice-based AI health advisory system
-
-The system is designed with accessibility in mind, allowing users to:
-- Call a toll-free number and interact in their native language
-- Get health advice through voice interaction
-- Use the mobile app to get text-based health advice
+A voice-based telehealth assistant that allows users to describe their health concerns and receive preliminary medical advice. The system uses Twilio for voice calls and implements a callback mechanism for user interactions.
 
 ## Features
 
-- **Multilingual Support**: English, Hindi, Tamil, and Telugu
-- **Voice-based Interaction**: Users can speak naturally to describe their health concerns
-- **Automated Health Advice**: System provides relevant health suggestions based on symptoms described
-- **Toll-free Access**: Accessible via a regular phone call without internet requirements
-- **Mobile App Integration**: Additional interface option for those with smartphones
+- **Voice Call Handling**: Users can call and describe their health concerns
+- **Callback System**: Supports requesting callbacks for later consultations
+- **Speech Recognition**: Converts user's voice input to text
+- **Medical Response System**: Provides preliminary medical advice based on user symptoms
+- **Error Handling**: Robust error handling for network issues and service interruptions
 
-## Technical Architecture
+## Technical Stack
 
-### Flutter Mobile App
-- Located in the `telehealth_mvp/` directory
-- Provides a GUI for text-based interaction
-- Connects to the backend API for health advice
-- Includes direct call functionality to the toll-free number
+### Backend (Python)
+- Flask: Web framework for the backend API
+- Twilio: For voice call handling and callbacks
+- PocketSphinx: For speech recognition (currently being upgraded)
+- Medicine-LLM: For generating medical advice (in development)
 
-### Flask Backend
-- Located in the `backend/` directory
-- Handles Twilio webhook integration for phone calls
-- Processes voice inputs and converts speech to text
-- Provides language detection and translation services
-- Generates health advice based on user concerns
-- Exposes API endpoints for the mobile app integration
+### Frontend (Flutter)
+- Flutter SDK: For cross-platform mobile app development
+- HTTP package: For API communication
+- Platform-specific packages for call handling
 
-## Setup Instructions
-
-### Prerequisites
+### Dependencies
+- Python 3.10+
 - Flutter SDK
-- Python 3.8+
-- Twilio account with a phone number
+- Flask
+- Twilio
+- SpeechRecognition
+- PyDub (for audio processing)
+- PocketSphinx
+- Transformers (for LLM integration)
+- PyTorch
 
-### Backend Setup
-1. Navigate to the backend directory:
-   ```
-   cd backend
-   ```
-2. Create a virtual environment:
-   ```
-   python -m venv venv
-   ```
-3. Activate the virtual environment:
-   - Windows: `venv\Scripts\activate`
-   - macOS/Linux: `source venv/bin/activate`
-4. Install dependencies:
-   ```
+## Setup
+
+1. Clone the repository
+2. Install Python dependencies:
+   ```bash
    pip install -r requirements.txt
    ```
-5. Set up environment variables:
-   ```
-   cp .env.example .env
-   ```
-   Then edit the `.env` file with your Twilio credentials
-6. Run the server:
-   ```
-   python run.py
-   ```
+3. Set up environment variables:
+   - `TWILIO_ACCOUNT_SID`
+   - `TWILIO_AUTH_TOKEN`
+   - `TWILIO_PHONE_NUMBER`
 
-### Flutter App Setup
-1. Navigate to the Flutter app directory:
-   ```
+4. Install Flutter dependencies:
+   ```bash
    cd telehealth_mvp
-   ```
-2. Install dependencies:
-   ```
    flutter pub get
    ```
-3. Update the API URL in `lib/main.dart` to point to your backend server
-4. Run the app:
-   ```
-   flutter run
-   ```
 
-## Deployment Considerations
+## Project Structure
 
-### Backend Deployment
-- Deploy to a cloud provider (AWS, Google Cloud, etc.)
-- Set up HTTPS with SSL certificates
-- Configure Twilio webhooks to point to your deployed backend
-- Implement proper logging and monitoring
+```
+├── telehealth_mvp/        # Flutter mobile application
+│   ├── lib/              # Flutter source code
+│   ├── android/          # Android-specific files
+│   ├── ios/              # iOS-specific files
+│   └── pubspec.yaml      # Flutter dependencies
+│
+├── backend/              # Python Flask backend
+│   └── app.py           # Main Flask application
+│
+├── requirements.txt      # Python dependencies
+└── README.md            # Project documentation
+```
 
-### Mobile App Deployment
-- Update API endpoints to production URLs
-- Build release versions:
-  ```
-  flutter build apk --release
-  flutter build ios --release
-  ```
-- Submit to app stores or distribute through appropriate channels
+## Current Status
 
-## For Rural Communities
-- Consider offline capabilities for areas with limited internet
-- Optimize app size for devices with limited storage
-- Ensure voice prompts are clear and use simple language
-- Provide educational resources about common health concerns
+- ✅ Basic call handling implemented
+- ✅ Callback system working
+- ✅ Basic speech recognition implemented
+- 🔄 Upgrading speech recognition for better accuracy
+- 🔄 Implementing advanced medical response system
 
-## Future Enhancements
-- Add more regional languages
-- Implement more sophisticated health advisory system
-- Include emergency service connections
-- Develop community health worker dashboards 
+## Known Issues & Future Improvements
+
+1. Speech Recognition Accuracy
+   - Current PocketSphinx implementation has accuracy limitations
+   - Planning to upgrade to more accurate cloud-based solutions
+
+2. Medical Response System
+   - Currently using template-based responses
+   - Working on integrating advanced LLM for better medical advice
+
+## Security & Compliance
+
+- All medical advice includes disclaimers
+- No personal health information is stored
+- Calls are handled securely through Twilio
